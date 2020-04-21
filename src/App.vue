@@ -1,6 +1,9 @@
 <template>
     <div id="app">
         <p>{{ mensaje }}</p>
+        <label for="busqueda">Busqueda </label>
+        <input type="text" name="busqueda" id="busqueda" v-on:keyup="busquedaPorDescripcion" v-model="busqueda.teclas" />
+
         <!-- Button trigger modal -->
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
             Nuevo
@@ -19,6 +22,9 @@
                     <div class="modal-body">
                         <label for="CodDepartamento">Codigo </label>
                         <input type="text" name="CodDepartamento" id="CodDepartamento" /> <br />
+                        <div class="alert alert-dismissible alert-warning" v-if="errorCodigoRepetido">
+                            <p>EL codigo ya esta en la base de datos</p>
+                        </div>
                         <label for="DescDepartamento">Descripcion </label>
                         <input type="text" name="DescDepartamento" id="DescDepartamento" /> <br />
                         <label for="VolumenNegocio">Volumen de negocio </label>
@@ -71,9 +77,9 @@
                         <label for="eCodDepartamento">Codigo </label>
                         <input type="text" name="eCodDepartamento" id="eCodDepartamento" v-model="departamento.CodDepartamento" disabled /> <br />
                         <label for="eDescDepartamento">Descripcion </label>
-                        <input type="text" name="eDescDepartamento" id="eDescDepartamento" v-model="departamento.DescDepartamento" /> <br />
+                        <input type="text" name="eDescDepartamento" id="eDescDepartamento" v-model.lazy="departamento.DescDepartamento" /> <br />
                         <label for="eVolumenNegocio">Volumen de negocio </label>
-                        <input type="number" name="eVolumenNegocio" id="eVolumenNegocio" v-model="departamento.VolumenNegocio" />
+                        <input type="number" name="eVolumenNegocio" id="eVolumenNegocio" v-model.lazy="departamento.VolumenNegocio" />
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -103,14 +109,11 @@
                 </div>
             </div>
         </div>
-
-
-
     </div>
 </template>
 
 <script>
-    import Axios from "axios";   
+    import Axios from "axios";
 
     export default {
         name: 'app',
@@ -119,6 +122,8 @@
                 mensaje: 'Prueba de mensaje',
                 arrayDepartamentos: [],
                 departamento: {},
+                busqueda: { teclas: '' },
+                errorCodigoRepetido: ''
             }
         },
         mounted() {
@@ -129,6 +134,17 @@
                 Axios.get("http://localhost/Api/api.php?accion=mostrar")
                     .then(response => (this.arrayDepartamentos = response.data.departamentos))
             },
+            busquedaPorDescripcion: function () {
+                let formData = new FormData()
+
+                formData.append("busqueda", document.getElementById("busqueda").value)
+
+                Axios.post("http://localhost/Api/api.php?accion=buscar", formData)
+                    .then(response => (this.arrayDepartamentos = response.data.departamentos))
+                //.then(function (response) {
+                //    console.log(response)
+                //})
+            },
             nuevoDepartamento: function () {
 
                 let formData = new FormData()
@@ -137,10 +153,9 @@
                 formData.append("DescDepartamento", document.getElementById("DescDepartamento").value)
                 formData.append("VolumenNegocio", document.getElementById("VolumenNegocio").value)
                 Axios.post("http://localhost/Api/api.php?accion=insertar", formData)
-                    .then(function (response) {
-                        console.log(response)                        
-                    })
+                    .then(response => (this.errorCodigoRepetido = response.data.error))
                 this.mostrarDatos()
+                
             },
             editarDepartamento: function () {
 
@@ -152,8 +167,8 @@
 
                 Axios.post("http://localhost/Api/api.php?accion=editar", formData)
                     .then(function (response) {
-                        console.log(response)                        
-                    })    
+                        console.log(response)
+                    })
                 this.mostrarDatos()
             },
             eliminarDepartamento: function () {
@@ -164,10 +179,9 @@
 
                 Axios.post("http://localhost/Api/api.php?accion=eliminar", formData)
                     .then(function (response) {
-                        console.log(response)                        
+                        console.log(response)
                     })
                 this.mostrarDatos()
-                
             },
             elegirDepartamento(d) {
                 this.departamento = d
@@ -179,4 +193,3 @@
 
 <style>
 </style>
-

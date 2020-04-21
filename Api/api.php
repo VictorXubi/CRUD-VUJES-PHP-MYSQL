@@ -1,5 +1,7 @@
 <?php 
 
+header("Access-Control-Allow-Origin: *");
+//header("Access-Control-Allow-Headers: *");
 
 require_once 'DepartamentoPDO.php';
 
@@ -11,7 +13,7 @@ if(isset($_GET['accion'])){
 }
 
 	switch ($accion) {
-	case 'mostrar':
+	case 'mostrar':	
 		$u = DepartamentoPDO::mostrarDepartamento();
 		if($u){
 			$res['departamentos'] = $u;			
@@ -20,19 +22,38 @@ if(isset($_GET['accion'])){
 		}
 		break;
 		
-	case 'insertar':		
-		$codigo = $_POST['CodDepartamento'];
-		$descripcion = $_POST['DescDepartamento'];
-		$volumen = $_POST['VolumenNegocio'];
+	case 'buscar':		
+		$descripcion = $_POST['busqueda'];
 		
-		$u = DepartamentoPDO::altaDepartamento($codigo,$descripcion,$volumen);
+		$u = DepartamentoPDO::buscarDepartamentoPorDescripcion($descripcion);
 		
 		if($u){
+			$res['departamentos'] = $u;	
 			$res['mensaje'] = "Exito";			
 		}else{
 			$res['mensaje'] = "Error";			
 		}
 		
+		break;	
+		
+	case 'insertar':		
+		$codigo = $_POST['CodDepartamento'];
+		$descripcion = $_POST['DescDepartamento'];
+		$volumen = $_POST['VolumenNegocio'];
+		
+		$codigoRepetido = DepartamentoPDO::validarCodNoExiste($codigo);
+		
+		if($codigoRepetido){
+			$res['error'] = "El codigo ya esta en la Base De Datos";
+		}else{
+			$u = DepartamentoPDO::altaDepartamento($codigo,$descripcion,$volumen);
+		
+			if($u){
+				$res['mensaje'] = "Exito";			
+			}else{
+				$res['mensaje'] = "Error";			
+			}
+		}
 		break;
 		
 	case 'editar':		
@@ -40,7 +61,7 @@ if(isset($_GET['accion'])){
 		$descripcion = $_POST['eDescDepartamento'];
 		$volumen = $_POST['eVolumenNegocio'];
 		
-		$u = DepartamentoPDO::modificarDepartamento($codigo,$descripcion,$volumen);
+		$u = DepartamentoPDO::modificaDepartamento($codigo,$descripcion,$volumen);
 		
 		if($u){
 			$res['mensaje'] = "Exito";			
@@ -64,8 +85,6 @@ if(isset($_GET['accion'])){
 		break;
 	}
 
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: *");
 echo json_encode($res);
 die();
 

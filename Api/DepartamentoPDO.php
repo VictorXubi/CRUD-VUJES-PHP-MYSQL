@@ -18,18 +18,32 @@ class DepartamentoPDO {
 
     public static function buscarDepartamentoPorDescripcion($DescDepartamento) {
         $aDepartamento = [];
-        $departamento = null;   
+        $departamento = null;  
+		
+		if($DescDepartamento == NULL){
+			
+		$sql = 'select * from Departamento where DescDepartamento like ?';            
         
-        $sql = 'select * from Departamento where DescDepartamento like ?';            
-        
-        $consulta = DBPDO::ejecutarConsulta($sql, ["%$DescDepartamento%"]);
+        $consulta = DBPDO::ejecutarConsulta($sql,["%%"]);		
+		
         if ($consulta->rowCount() != 0) {
             for ($i = 0; $i < $consulta->rowCount(); $i++) {
-                $datos = $consulta->fetchObject();
-                $departamento = new Departamento($datos->CodDepartamento, $datos->DescDepartamento, $datos->FechaBajaDepartamento, $datos->FechaCreacionDepartamento, $datos->VolumenNegocio);
-                array_push($aDepartamento, $departamento);
+                $datos = $consulta->fetch(PDO::FETCH_ASSOC);                
+                array_push($aDepartamento, $datos);
             }
         }
+		}else{
+			$sql = 'select * from Departamento where DescDepartamento like ?';            
+        
+		$consulta = DBPDO::ejecutarConsulta($sql, ["%$DescDepartamento%"]);
+			if ($consulta->rowCount() != 0) {
+				for ($i = 0; $i < $consulta->rowCount(); $i++) {
+					$datos = $consulta->fetch(PDO::FETCH_ASSOC);                
+					array_push($aDepartamento, $datos);
+				}
+			}
+		}							
+      
         return $aDepartamento;
     }   
 
