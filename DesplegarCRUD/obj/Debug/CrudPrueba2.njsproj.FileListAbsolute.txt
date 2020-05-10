@@ -1,0 +1,3 @@
+C:\Users\NeoKhazar\source\repos\CrudPrueba2\CrudPrueba2\obj\Debug\CrudPrueba2.njsprojAssemblyReference.cache
+C:\Users\NeoKhazar\source\repos\CrudPrueba2\CrudPrueba2\obj\Debug\CrudPrueba2.njsproj.CoreCompileInputs.cache
+C:\Users\NeoKhazar\source\repos\CrudPrueba2\CrudPrueba2\bin\Microsoft.NodejsTools.WebRole.dll
