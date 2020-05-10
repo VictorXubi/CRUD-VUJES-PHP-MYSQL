@@ -14,9 +14,9 @@
             <li v-if="auth">
                 <router-link to="/dashboard">Dashboard</router-link>
             </li>
-            <li v-if="auth">
+            <!--<li v-if="auth">
                 <router-link to="/crud">CRUD</router-link>
-            </li>
+            </li>-->
             <li v-if="auth">
                 <router-link to="/game">Game</router-link>
             </li>

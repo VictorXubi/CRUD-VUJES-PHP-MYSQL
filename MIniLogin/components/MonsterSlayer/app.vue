@@ -1,5 +1,5 @@
 <template>
-    <game style="text-align:center"></game>
+    <game></game>
 </template>
 
 <script>

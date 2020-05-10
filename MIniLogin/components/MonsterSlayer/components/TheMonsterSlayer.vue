@@ -22,12 +22,12 @@
                 </div>
             </div>
         </section>
-        <section id="row controls" v-if="!gameIsRunning">
+        <section class="controls" v-if="!gameIsRunning">
             <div class="small-12 columns">
                 <button id="start-game" @click="startGame">START NEW GAME</button>
             </div>
         </section>
-        <section id="row controls" v-else>
+        <section class="controls" v-else>
             <div class="small-12 columns">
                 <button id="attack" @click="attack">ATTACK</button>
                 <button id="special-attack" @click="specialAttack">SPECIAL ATTACK</button>
@@ -35,7 +35,7 @@
                 <button id="give-up" @click="giveUp">GIVE UP</button>
             </div>
         </section>
-        <section class="row log" v-if="turns.length > 0">
+        <section class="log" v-if="turns.length > 0">
             <div class="small-12 columns">
                 <ul>
                     <li v-for="turn in turns" :class="{'player-turn': turn.isPlayer, 'monster-turn': !turn.isPlayer}">

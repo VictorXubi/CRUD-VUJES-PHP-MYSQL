@@ -8,7 +8,7 @@ import DashboardPage from './components/dashboard/dashboard.vue'
 import SignupPage from './components/auth/signup.vue'
 import SigninPage from './components/auth/signin.vue'
 import CRUD from './components/CRUD/App.vue'
-import Game from './components/MonsterSlayer/App.vue'
+import Game from './components/MonsterSlayer/app.vue'
 //import MonsterSlayer from './components/MonsterSlayer/TheMonsterSlayer.vue'
 
 Vue.use(VueRouter)
@@ -29,17 +29,6 @@ const routes = [
         }
     },
     {
-        path: '/crud',
-        component: CRUD,
-        beforeEnter(to, from, next) {
-            if (store.state.idToken) {
-                next()
-            } else {
-                next('/signin')
-            }
-        }
-    },
-    {
         path: '/game',
         component: Game,
         beforeEnter(to, from, next) {
@@ -50,17 +39,7 @@ const routes = [
             }
         }
     }
-    //{
-    //    path: '/MonsterSlayer',
-    //    component: MonsterSlayer,
-    //    beforeEnter(to, from, next) {
-    //        if (store.state.idToken) {
-    //            next()
-    //        } else {
-    //            next('/signin')
-    //        }
-    //    }
-    //}
+
 ]
 
 export default new VueRouter({mode: 'history', routes})
