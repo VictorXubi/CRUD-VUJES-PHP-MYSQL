@@ -1,45 +1,25 @@
 <template>
     <div id="app">
-        <p>{{ mensaje }}</p>
-        <label for="busqueda">Busqueda </label>
-        <input type="text" name="busqueda" id="busqueda" v-on:keyup="busquedaPorDescripcion" v-model="busqueda.teclas" />
-
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-            Nuevo
-        </button>
-
-        <button @click="mostrarDatos()" type="button" class="btn btn-primary">Recargar Tabla</button>
-
-        <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Crear Departamento</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <label for="CodDepartamento">Codigo </label>
-                        <input type="text" name="CodDepartamento" id="CodDepartamento" /> <br />
-                        <div class="alert alert-dismissible alert-warning" v-if="errorCodigoRepetido">
-                            <p>EL codigo ya esta en la base de datos</p>
-                        </div>
-                        <label for="DescDepartamento">Descripcion </label>
-                        <input type="text" name="DescDepartamento" id="DescDepartamento" /> <br />
-                        <label for="VolumenNegocio">Volumen de negocio </label>
-                        <input type="number" name="VolumenNegocio" id="VolumenNegocio" />
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                        <button @click="nuevoDepartamento()" type="button" class="btn btn-primary">Crear</button>
-                    </div>
+        <div class="container">
+            <div class="abs-center">
+                <div class="form-group">
+                    <label for="busqueda">Busqueda por descripcion </label>
+                    <input class="form-group" type="text" name="busqueda" id="busqueda" v-on:keyup="busquedaPorDescripcion" v-model="busqueda.teclas" />
                 </div>
             </div>
         </div>
-
+        <div class="container">
+            <div class="abs-center">
+                <div class="form-group">
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                        Nuevo
+                    </button>
+                    <button @click="mostrarDatos()" type="button" class="btn btn-primary">Recargar Tabla</button>
+                </div>
+            </div>
+        </div>
+        <!-- Tabla -->
         <table class="table">
             <thead class="thead-dark">
                 <tr>
@@ -66,6 +46,36 @@
             </tbody>
         </table>
 
+        <!-- Modal Crear -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Crear Departamento</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <label for="CodDepartamento">Codigo </label>
+                        <input type="text" name="CodDepartamento" id="CodDepartamento" /> <br />
+                        <div class="alert alert-dismissible alert-warning" v-if="errorCodigoRepetido">
+                            <p>EL codigo ya esta en la base de datos</p>
+                        </div>
+                        <label for="DescDepartamento">Descripcion </label>
+                        <input type="text" name="DescDepartamento" id="DescDepartamento" /> <br />
+                        <label for="VolumenNegocio">Volumen de negocio </label>
+                        <input type="number" name="VolumenNegocio" id="VolumenNegocio" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button @click="nuevoDepartamento()" type="button" data-dismiss="modal" class="btn btn-primary">Crear</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Editar -->
         <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -85,12 +95,12 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                        <button @click="editarDepartamento()" type="button" class="btn btn-primary">Editar</button>
+                        <button @click="editarDepartamento()" type="button" data-dismiss="modal" class="btn btn-primary">Editar</button>
                     </div>
                 </div>
             </div>
         </div>
-
+        <!-- Modal Eliminar -->
         <div class="modal fade" id="exampleModal3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -106,7 +116,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                        <button @click="eliminarDepartamento()" type="button" class="btn btn-primary">Borrar</button>
+                        <button @click="eliminarDepartamento()" type="button" data-dismiss="modal" class="btn btn-primary">Borrar</button>
                     </div>
                 </div>
             </div>
@@ -125,11 +135,12 @@
                 arrayDepartamentos: [],
                 departamento: {},
                 busqueda: { teclas: '' },
-                errorCodigoRepetido: ''
+                errorCodigoRepetido: '',
+                showModal: false
             }
         },
         mounted() {
-            this.mostrarDatos()
+            this.mostrarDatos();
         },
         methods: {
             mostrarDatos: function () {
@@ -194,4 +205,9 @@
 </script>
 
 <style>
+    .abs-center {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 </style>
